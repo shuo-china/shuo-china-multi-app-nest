@@ -26,7 +26,10 @@ export class AdminAuthGuard extends AuthGuard(AuthStrategyName) {
   }
 
   handleRequest(err, user) {
-    if (err || !user) {
+    if (err) {
+      throw err
+    }
+    if (!user) {
       throw new ApiException({ code: 'TOKEN_INVALID', message: '令牌无效' }, HttpStatus.UNAUTHORIZED)
     }
     return user
