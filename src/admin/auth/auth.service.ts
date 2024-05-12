@@ -3,12 +3,12 @@ import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import { user } from '@prisma/client'
 
-interface Payload {
+export interface Payload {
   sub: number
-  appName: string
+  strategyName: string
 }
 
-export const appName = 'admin'
+export const StrategyName = 'Admin-JWT'
 
 @Injectable()
 export class AuthService {
@@ -18,7 +18,7 @@ export class AuthService {
   ) {}
 
   public generateAccessToken(user: Pick<user, 'id' | 'username'>) {
-    const payload: Payload = { sub: user.id, appName: 'admin' }
+    const payload: Payload = { sub: user.id, strategyName: StrategyName }
 
     return {
       token_type: 'Bearer',
