@@ -1,24 +1,43 @@
-import { Injectable } from '@nestjs/common'
+import { StrategyName } from '@/common/enums/strategy-name.enum'
+
+import { HttpStatus, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
-import { user } from '@prisma/client'
+import { AdminUser } from '@prisma/client'
+import { LoginDto } from './dtos/login.dto'
+import { PrismaService } from '@/prisma/prisma.service'
+import { verify } from 'argon2'
+import { ApiException } from '@/common/exceptions/api.exception'
 
 export interface Payload {
   sub: number
-  strategyName: string
+  strategyName: StrategyName
 }
-
-export const StrategyName = 'Admin-JWT'
 
 @Injectable()
 export class AuthService {
   constructor(
     private configService: ConfigService,
     private jwtService: JwtService,
+    private prisma: PrismaService,
   ) {}
 
-  public generateAccessToken(user: Pick<user, 'id' | 'username'>) {
-    const payload: Payload = { sub: user.id, strategyName: StrategyName }
+  public async login(dto: LoginDto) {
+    const user = await this.prisma.adminUser.findUnique({
+      where: {
+        username: dto.username,
+      },
+    })
+
+    if (!user || !(await verify(user.password, dto.password))) {
+      throw new ApiException({ code: 'LOGIN_FAIL', message: '用户名或密码不正确' }, HttpStatus.UNAUTHORIZED)
+    }
+
+    return this.generateAccessToken(user)
+  }
+
+  private generateAccessToken(user: AdminUser) {
+    const payload: Payload = { sub: user.id, strategyName: StrategyName.AdminJWT }
 
     return {
       token_type: 'Bearer',

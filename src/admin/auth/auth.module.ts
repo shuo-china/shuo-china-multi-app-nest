@@ -1,24 +1,10 @@
 import { Module } from '@nestjs/common'
 import { AuthController } from './auth.controller'
-import { AuthService, Payload, StrategyName } from './auth.service'
-import { createAuthStrategy } from '@/common/auth'
-import { ConfigService } from '@nestjs/config'
+import { AuthService } from './auth.service'
+import { AdminAuthStrategy } from '@/common/strategies/admin-auth.strategy'
 
 @Module({
   controllers: [AuthController],
-  providers: [
-    {
-      provide: 's',
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        const test = createAuthStrategy(StrategyName, (payload: Payload) => {
-          return { sub: payload.sub }
-        })
-        new test(configService)
-      },
-    },
-
-    AuthService,
-  ],
+  providers: [AdminAuthStrategy, AuthService],
 })
 export class AuthModule {}
