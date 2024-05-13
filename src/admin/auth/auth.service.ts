@@ -37,7 +37,7 @@ export class AuthService {
   }
 
   private generateAccessToken(user: AdminUser) {
-    const payload: Payload = { sub: user.id, strategyName: StrategyName.AdminJWT }
+    const payload: Payload = { sub: user.id, strategyName: StrategyName.AdminAuth }
 
     return {
       token_type: 'Bearer',

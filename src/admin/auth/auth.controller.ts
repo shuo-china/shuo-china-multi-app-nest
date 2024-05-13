@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Post } from '@nestjs/common'
+import { Body, Controller, Get, Post, UploadedFile, UseInterceptors } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { CurrentUser } from '@/common/decorators/current-user.decorator'
 import { AdminAuth } from '@/common/decorators/admin-auth.decorator'
 import { LoginDto } from './dtos/login.dto'
 import { AdminRoles } from '@/common/decorators/admin-roles.decorator'
 import { AdminRole } from '@/common/enums/role-name.enum'
+import { FileInterceptor } from '@nestjs/platform-express'
 
 @Controller('admin/auth')
 export class AuthController {
@@ -20,5 +21,11 @@ export class AuthController {
   @AdminAuth()
   getProfile(@CurrentUser() user) {
     return user
+  }
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  upload(@UploadedFile() file: Express.Multer.File) {
+    return file
   }
 }

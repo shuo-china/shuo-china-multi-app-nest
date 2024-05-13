@@ -7,7 +7,7 @@ import { TokenInvalidException } from '@/common/exceptions/token-invalid.excepti
 import { StrategyName } from '@/common/enums/strategy-name.enum'
 
 @Injectable()
-export class AdminAuthGuard extends AuthGuard(StrategyName.AdminJWT) {
+export class AdminAuthGuard extends AuthGuard(StrategyName.AdminAuth) {
   constructor(private reflector: Reflector) {
     super()
   }

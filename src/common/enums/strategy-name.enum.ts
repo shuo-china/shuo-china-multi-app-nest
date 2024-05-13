@@ -1,3 +1,3 @@
 export enum StrategyName {
-  AdminJWT = 'AdminJWT',
+  AdminAuth = 'AdminAuth',
 }
