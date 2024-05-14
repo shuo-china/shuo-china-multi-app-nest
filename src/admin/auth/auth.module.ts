@@ -4,6 +4,7 @@ import { AuthService } from './auth.service'
 import { AdminAuthStrategy } from '@/common/strategies/admin-auth.strategy'
 
 @Module({
+  imports: [],
   controllers: [AuthController],
   providers: [AdminAuthStrategy, AuthService],
 })

@@ -6,6 +6,7 @@ import { LoginDto } from './dtos/login.dto'
 import { AdminRoles } from '@/common/decorators/admin-roles.decorator'
 import { AdminRole } from '@/common/enums/role-name.enum'
 import { FileInterceptor } from '@nestjs/platform-express'
+import { TestInterceptor } from '@/common/interceptors/test.interceptor'
 
 @Controller('admin/auth')
 export class AuthController {
@@ -24,8 +25,11 @@ export class AuthController {
   }
 
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
-  upload(@UploadedFile() file: Express.Multer.File) {
+  @UseInterceptors(FileInterceptor('file'), TestInterceptor())
+  upload(
+    @UploadedFile('file')
+    file: Express.Multer.File,
+  ) {
     return file
   }
 }
