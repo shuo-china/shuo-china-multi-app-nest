@@ -46,7 +46,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
   }
 
   public handleHttpExceptionResponse(response: Record<string, any>, exception: HttpException) {
-    const code = 'code' in response ? response.code : exception.name
+    const code = 'code' in response ? response.code : response.error ?? exception.name
     const message = 'message' in response ? response.message : exception.message
     return this.createBody(code, message, response)
   }

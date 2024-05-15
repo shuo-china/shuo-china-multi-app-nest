@@ -7,6 +7,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model File {
+  id           Int      @id @default(autoincrement())
+  originalName String
+  fileName     String
+  path         String
+  extension    String
+  mime         String
+  size         Int
+  isImage      Boolean
+  width        Int?
+  height       Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
 model AdminUser {
   id        Int                 @id @default(autoincrement())
   username  String              @unique

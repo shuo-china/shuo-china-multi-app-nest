@@ -1,3 +1,3 @@
 export enum StrategyName {
-  AdminAuth = 'AdminAuth',
+  AdminAuth = 'admin',
 }
