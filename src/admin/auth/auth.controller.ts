@@ -1,12 +1,11 @@
-import { Body, Controller, Get, Post, UploadedFile, UseInterceptors } from '@nestjs/common'
+import { Body, Controller, Get, Post, UploadedFile } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { CurrentUser } from '@/common/decorators/current-user.decorator'
 import { AdminAuth } from '@/common/decorators/auth.decorator'
 import { LoginDto } from './dtos/login.dto'
 import { AdminRoles } from '@/common/decorators/roles.decorator'
 import { AdminRole } from '@/common/enums/roles-name.enum'
-import { FileInterceptor } from '@nestjs/platform-express'
-import { FileLoggerInterceptor } from '@/common/interceptors/file-logger.interceptor'
+import { Upload } from '@/common/decorators/upload.decorator'
 
 @Controller('admin/auth')
 export class AuthController {
@@ -25,12 +24,7 @@ export class AuthController {
   }
 
   @Post('upload')
-  @UseInterceptors(
-    FileInterceptor('files', {
-      fileFilter(req, file, cb) {},
-    }),
-    FileLoggerInterceptor,
-  )
+  @Upload()
   upload(
     @UploadedFile('file')
     file: Express.Multer.File,
