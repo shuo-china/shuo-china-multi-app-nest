@@ -6,6 +6,9 @@ import { AdminModule } from './admin/admin.module'
 import { WeappModule } from './weapp/weapp.module'
 import * as configs from '@/configs'
 import { isDev } from '@/common/utils/env'
+import { AllExceptionsFilter } from '@/common/filters/all-exceptions.filter'
+import { APP_FILTER, APP_PIPE } from '@nestjs/core'
+import ValidatePipe from '@/common/pipes/Validate.pipe'
 
 @Module({
   imports: [
@@ -25,6 +28,16 @@ import { isDev } from '@/common/utils/env'
     PrismaModule,
     AdminModule,
     WeappModule,
+  ],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+    {
+      provide: APP_PIPE,
+      useClass: ValidatePipe,
+    },
   ],
 })
 export class AppModule {}

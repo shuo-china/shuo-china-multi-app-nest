@@ -4,18 +4,23 @@ import { MESSAGES } from '@nestjs/core/constants'
 import { isObject } from '@nestjs/common/utils/shared.utils'
 import Case from 'case'
 import { isDev } from '@/common/utils/env'
+import { PrismaService } from '@/prisma/prisma.service'
+import { Prisma } from '@prisma/client'
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   private static readonly logger = new Logger('ExceptionsHandler')
 
-  constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
+  constructor(
+    private readonly httpAdapterHost: HttpAdapterHost,
+    private prisma: PrismaService,
+  ) {}
 
-  catch(exception: unknown, host: ArgumentsHost): void {
+  async catch(exception: unknown, host: ArgumentsHost) {
     const { httpAdapter } = this.httpAdapterHost
 
     if (!(exception instanceof HttpException)) {
-      return this.handleUnknownError(exception, host, httpAdapter)
+      return await this.handleUnknownError(exception, host, httpAdapter)
     }
 
     const response = host.getArgByIndex(1)
@@ -51,7 +56,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     return this.createBody(code, message, response)
   }
 
-  public handleUnknownError(exception: unknown, host: ArgumentsHost, httpAdapter: AbstractHttpAdapter) {
+  public async handleUnknownError(exception: unknown, host: ArgumentsHost, httpAdapter: AbstractHttpAdapter) {
     const response = host.getArgByIndex(1)
     if (!httpAdapter.isHeadersSent(response)) {
       let body: ReturnType<typeof this.createBody>
@@ -70,6 +75,23 @@ export class AllExceptionsFilter implements ExceptionFilter {
     }
 
     if (exception instanceof Error) {
+      if (exception.name !== 'PrismaClientInitializationError') {
+        const data: Prisma.ErrorCreateInput = {
+          name: exception.name,
+          message: exception.message,
+          stack: exception.stack,
+        }
+
+        const req = host.switchToHttp().getRequest()
+        if (req) {
+          data.path = req.path
+          data.params = JSON.stringify(req.params)
+          data.query = JSON.stringify(req.query)
+          data.body = JSON.stringify(req.body)
+        }
+
+        await this.prisma.error.create({ data })
+      }
       return AllExceptionsFilter.logger.error(exception.message, exception.stack)
     }
 

@@ -22,6 +22,17 @@ model File {
   updatedAt    DateTime @updatedAt
 }
 
+model Error {
+  id      Int     @id @default(autoincrement())
+  name    String
+  message String  @db.Text
+  stack   String  @db.LongText
+  path    String?
+  params  String?
+  query   String? @db.LongText
+  body    String? @db.LongText
+}
+
 model AdminUser {
   id        Int                 @id @default(autoincrement())
   username  String              @unique

@@ -1,7 +1,7 @@
 import { registerAs } from '@nestjs/config'
 
 export default registerAs('upload', () => ({
-  imageLimitSize: 1024,
-  imageAllowMimes: ['image/jpeg'],
-  imageDestination: 'public/uploads',
+  imageLimitSize: '2M',
+  imageAllowMimes: 'image/*',
+  destination: 'public/uploads',
 }))
