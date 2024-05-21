@@ -21,10 +21,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "migrate-dev:dev": "dotenv -e .env.development -- npx prisma migrate dev",
-    "migrate-dev:prod": "dotenv -e .env.production -- npx prisma migrate dev",
-    "migrate-reset:dev": "dotenv -e .env.development -- npx prisma migrate reset",
-    "migrate-reset:prod": "dotenv -e .env.production -- npx prisma migrate reset"
+    "migrate-dev": "dotenv -e .env.development -- npx prisma migrate dev",
+    "migrate-reset": "dotenv -e .env.development -- npx prisma migrate reset"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
