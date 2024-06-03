@@ -28,3 +28,4 @@ function createAuthStrategy(strategyName: StrategyName) {
 }
 
 export const AdminAuthStrategy = createAuthStrategy(StrategyName.AdminAuth)
+export const WeappAuthStrategy = createAuthStrategy(StrategyName.WeappAuth)

@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common'
 import { AuthModule } from './auth/auth.module'
 import { UploadModule } from './upload/upload.module'
+import { UserModule } from './user/user.module'
 
 @Module({
-  imports: [AuthModule, UploadModule],
+  imports: [AuthModule, UploadModule, UserModule],
 })
 export class AdminModule {}

@@ -67,3 +67,13 @@ model AdminRolesOnUsers {
   @@id([userId, roleId])
   @@map("admin_roles_on_users")
 }
+
+model WeappUser {
+  id        Int      @id @default(autoincrement())
+  openid    String   @unique
+  nickname  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("weapp_user")
+}

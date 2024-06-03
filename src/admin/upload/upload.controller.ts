@@ -24,6 +24,9 @@ export class UploadController {
     @UploadedFile()
     file: Express.Multer.File,
   ) {
+    if (!file) {
+      throw new ValidateException('上传字段不能为空', 'file')
+    }
     return file
   }
 }

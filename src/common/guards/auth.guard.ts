@@ -43,3 +43,5 @@ function createAuthGuard(strategyName: StrategyName) {
 }
 
 export const AdminAuthGuard = createAuthGuard(StrategyName.AdminAuth)
+
+export const WeappAuthGuard = createAuthGuard(StrategyName.WeappAuth)
